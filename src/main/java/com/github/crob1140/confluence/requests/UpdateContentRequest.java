@@ -21,9 +21,8 @@ import javax.ws.rs.HttpMethod;
  * This class represents a request to update content in the Confluence Cloud server.
  */
 public class UpdateContentRequest extends ConfluenceRequest {
-
-  private String id;
-  private Content content;
+  private final String id;
+  private final Content content;
 
   private UpdateContentRequest(Builder builder) {
     this.id = builder.id;
@@ -245,13 +244,16 @@ public class UpdateContentRequest extends ConfluenceRequest {
         throw new IllegalStateException(
             "You must specify the ID of the content you are trying to update");
       }
+
       if (this.type == null) {
         throw new IllegalStateException(
             "You must specify the type of content you are trying to update");
       }
+
       if (this.versionNumber == null) {
         throw new IllegalStateException("You must specify the new version of the content");
       }
+
       if (this.title == null) {
         throw new IllegalStateException("You must specify the title of the content");
       }

@@ -6,9 +6,8 @@ import java.util.Base64;
  * This class represents the Basic HTTP authentication scheme.
  */
 public class BasicAuth implements AuthMethod {
-
-  private String username;
-  private String password;
+  private final String username;
+  private final String password;
 
   /**
    * This constructor creates a new instance of {@link BasicAuth} using the given username and

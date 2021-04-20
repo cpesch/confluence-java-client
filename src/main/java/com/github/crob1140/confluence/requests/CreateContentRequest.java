@@ -1,5 +1,14 @@
 package com.github.crob1140.confluence.requests;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.ws.rs.HttpMethod;
+
 import com.github.crob1140.confluence.content.Content;
 import com.github.crob1140.confluence.content.ContentBody;
 import com.github.crob1140.confluence.content.ContentBodyType;
@@ -9,14 +18,6 @@ import com.github.crob1140.confluence.content.LabelPrefix;
 import com.github.crob1140.confluence.content.Metadata;
 import com.github.crob1140.confluence.content.StandardContentType;
 import com.github.crob1140.confluence.content.expand.ExpandedContentProperties;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.ws.rs.HttpMethod;
 
 /**
  * This class represents a request to create content in the Confluence Cloud server.
@@ -86,8 +87,7 @@ public class CreateContentRequest extends ConfluenceRequest {
     }
 
     if (this.expandedResponseProperties != null) {
-      queryParams.put("expand", this.expandedResponseProperties.getProperties()
-          .stream().collect(Collectors.joining(",")));
+      queryParams.put("expand", String.join(",", this.expandedResponseProperties.getProperties()));
     }
 
     return queryParams;
@@ -117,7 +117,6 @@ public class CreateContentRequest extends ConfluenceRequest {
    * This class can be used to construct an instance of {@link CreateContentRequest}.
    */
   public static class Builder {
-
     private ContentStatus responseStatusFilter;
     private ContentBodyType bodyType;
     private String bodyContent;
@@ -267,8 +266,7 @@ public class CreateContentRequest extends ConfluenceRequest {
      * that is returned as a response to this request.
      * @return This instance, for the purposes of method chaining.
      */
-    public Builder setExpandedResponseProperties(
-        ExpandedContentProperties expandedResponseProperties) {
+    public Builder setExpandedResponseProperties(ExpandedContentProperties expandedResponseProperties) {
       this.expandedResponseProperties = expandedResponseProperties;
       return this;
     }

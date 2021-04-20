@@ -3,6 +3,7 @@ package com.github.crob1140.confluence.requests;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,8 +12,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class TestSearchRequestValidation
-{
+public class TestSearchRequestValidation {
 
   @Rule
   public final ExpectedException exception = ExpectedException.none();

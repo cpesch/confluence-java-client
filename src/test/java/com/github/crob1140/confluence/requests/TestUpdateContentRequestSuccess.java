@@ -29,6 +29,7 @@ public class TestUpdateContentRequestSuccess extends TestConfluenceRequestSucces
         "Request construction succeeds with just the mandatory fields",
         new UpdateContentRequest.Builder()
             .setId("123")
+            .setTitle("abc")
             .setVersion(2)
             .setType(StandardContentType.PAGE)
             .build(),
@@ -45,6 +46,7 @@ public class TestUpdateContentRequestSuccess extends TestConfluenceRequestSucces
         "Only the last body set is included in the request",
         new UpdateContentRequest.Builder()
             .setId("123")
+            .setTitle("abc")
             .setVersion(2)
             .setType(StandardContentType.PAGE)
             .setBody(ContentBodyType.EDITOR2, "<html>TEST</html>")
@@ -72,6 +74,7 @@ public class TestUpdateContentRequestSuccess extends TestConfluenceRequestSucces
         "Any labels that are added should be included in the request",
         new UpdateContentRequest.Builder()
             .setId("123")
+            .setTitle("abc")
             .setVersion(2)
             .setType(StandardContentType.PAGE)
             .addLabel("global-label")

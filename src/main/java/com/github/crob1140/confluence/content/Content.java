@@ -32,7 +32,6 @@ public class Content {
   private Metadata metadata;
   @JsonProperty
   private Version version;
-
   @SuppressWarnings("unused")
   private Content() {
     // Required for Jackson deserialization
@@ -137,7 +136,6 @@ public class Content {
    * or modifying some content on the Confluence Cloud server.
    */
   public static class Builder {
-
     private String id;
     private String type;
     private ContentStatus status;

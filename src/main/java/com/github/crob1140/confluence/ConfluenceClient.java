@@ -1,12 +1,31 @@
 package com.github.crob1140.confluence;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+
 import com.github.crob1140.confluence.auth.AuthMethod;
 import com.github.crob1140.confluence.content.Content;
 import com.github.crob1140.confluence.content.search.SearchResult;
 import com.github.crob1140.confluence.errors.ConfluenceRequestException;
 import com.github.crob1140.confluence.errors.ErrorResponse;
+import com.github.crob1140.confluence.requests.AddAttachmentsRequest;
+import com.github.crob1140.confluence.requests.ConfluenceFileRequest;
 import com.github.crob1140.confluence.requests.ConfluenceRequest;
 import com.github.crob1140.confluence.requests.CreateContentRequest;
+import com.github.crob1140.confluence.requests.DeleteAttachmentsRequest;
+import com.github.crob1140.confluence.requests.GetAttachmentsRequest;
+import com.github.crob1140.confluence.requests.GetAttachmentsResponse;
 import com.github.crob1140.confluence.requests.GetContentRequest;
 import com.github.crob1140.confluence.requests.GetContentResponse;
 import com.github.crob1140.confluence.requests.SearchContentRequest;
@@ -14,15 +33,6 @@ import com.github.crob1140.confluence.requests.SearchContentResponse;
 import com.github.crob1140.confluence.requests.SearchRequest;
 import com.github.crob1140.confluence.requests.SearchResponse;
 import com.github.crob1140.confluence.requests.UpdateContentRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 /**
  * This class sends requests to a Confluence Cloud server.
@@ -100,7 +110,55 @@ public class ConfluenceClient {
     return (Content) performRequest(request);
   }
 
-  /**
+    public Content addAttachment(AddAttachmentsRequest request) throws ConfluenceRequestException {
+        return (Content) performFileRequest(request);
+    }
+
+    public Content deleteAttachment(DeleteAttachmentsRequest request) throws ConfluenceRequestException {
+        return (Content) performRequest(request);
+    }
+
+    public List<Content> getAttachments(GetAttachmentsRequest request) throws ConfluenceRequestException {
+        return ((GetAttachmentsResponse) performRequest(request)).getResults();
+    }
+
+    Object performFileRequest(ConfluenceFileRequest request) throws ConfluenceRequestException {
+        WebTarget endpointTarget = wikiTarget.path(request.getRelativePath());
+        for (Entry<String, String> queryParam : request.getQueryParams().entrySet()) {
+            endpointTarget = endpointTarget.queryParam(queryParam.getKey(), queryParam.getValue());
+        }
+
+        Invocation.Builder invocationBuilder = endpointTarget.request();
+        Map<String, String> headers = getRequestHeaders(request);
+        for (Entry<String, String> headerEntry : headers.entrySet()) {
+            invocationBuilder.header(headerEntry.getKey(), headerEntry.getValue());
+        }
+        invocationBuilder.header("X-Atlassian-Token", "nocheck");
+
+        String methodName = request.getMethod();
+
+        final FileDataBodyPart filePart = new FileDataBodyPart("file", request.getFile());
+        FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+        final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart);
+
+        Response response = invocationBuilder.method(methodName, Entity.entity(multipart, multipart.getMediaType()));
+
+        int statusCode = response.getStatus();
+        if (response.getStatus() >= 300) {
+            String errorMsg;
+            if (MediaType.APPLICATION_JSON_TYPE.equals(response.getMediaType())) {
+                ErrorResponse errResponse = response.readEntity(ErrorResponse.class);
+                errorMsg = errResponse.getMessage();
+            } else {
+                errorMsg = response.getStatusInfo().getReasonPhrase();
+            }
+            throw new ConfluenceRequestException(statusCode, errorMsg);
+        }
+
+        return response.readEntity(request.getReturnType());
+    }
+
+    /**
    * This method sends a request to the Confluence Cloud server to search for content defined in the
    * given {@link SearchContentRequest}.
    *
@@ -191,4 +249,14 @@ public class ConfluenceClient {
     }
     return requestHeaders;
   }
+
+    private Map<String, String> getRequestHeaders(ConfluenceFileRequest request) {
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("Content-Type", "multipart/form-data");
+        requestHeaders.put("Accept", request.getAcceptedResponseType().toString());
+        if (authMethod != null) {
+            requestHeaders.put("Authorization", authMethod.getAuthHeaderValue());
+        }
+        return requestHeaders;
+    }
 }
