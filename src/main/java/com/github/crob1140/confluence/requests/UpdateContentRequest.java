@@ -245,14 +245,15 @@ public class UpdateContentRequest extends ConfluenceRequest {
         throw new IllegalStateException(
             "You must specify the ID of the content you are trying to update");
       }
-
       if (this.type == null) {
         throw new IllegalStateException(
             "You must specify the type of content you are trying to update");
       }
-
       if (this.versionNumber == null) {
         throw new IllegalStateException("You must specify the new version of the content");
+      }
+      if (this.title == null) {
+        throw new IllegalStateException("You must specify the title of the content");
       }
 
       return new UpdateContentRequest(this);
