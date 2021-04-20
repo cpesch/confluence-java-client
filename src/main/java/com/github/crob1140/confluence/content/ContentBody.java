@@ -59,4 +59,28 @@ public class ContentBody {
         break;
     }
   }
+
+  /**
+   * Return the content body format for a given type.
+   * @param type The body type that is being defined.
+   * @return the content body format for the given type.
+   */
+  public ContentBodyFormat getFormat(ContentBodyType type) {
+    switch (type) {
+      case ANONYMOUS_EXPORT_VIEW:
+        return anonymous_export_view;
+      case EDITOR2:
+        return editor2;
+      case EXPORT_VIEW:
+        return export_view;
+      case STORAGE:
+        return storage;
+      case STYLED_VIEW:
+        return styled_view;
+      case VIEW:
+        return view;
+      default:
+        throw new IllegalArgumentException("ContentBodyType " + type + " is unknown");
+    }
+  }
 }
