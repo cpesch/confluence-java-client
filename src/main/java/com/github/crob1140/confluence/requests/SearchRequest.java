@@ -20,8 +20,7 @@ import com.github.crob1140.confluence.content.search.Excerpt;
  * @see <a href="https://developer.atlassian.com/server/confluence/advanced-searching-using-cql/">Confluence Query Language (CQL)</a>
  * @see <a href="https://docs.atlassian.com/atlassian-confluence/REST/6.6.0/#search-search">Confluence Search API</a>
  */
-public class SearchRequest
-    extends ConfluenceRequest {
+public class SearchRequest extends ConfluenceRequest {
 
   /**
    * The CQL query.
@@ -29,31 +28,29 @@ public class SearchRequest
   private final String cql;
 
   /**
-   * The execution context for CQL functions, provides current space key and content id. If this is not provided some CQL functions will not be available.
+   * The execution context for CQL functions, provides current space key and content id. If this is not provided some
+   * CQL functions will not be available.
    */
   private final CqlContext cqlContext;
 
   /**
-   * The excerpt strategy to apply to the result, one of: indexed, highlight, none. This defaults to highlight.
-   * Default value: highlight
+   * The excerpt strategy to apply to the result, one of: indexed, highlight, none. This defaults to highlight. Default
+   * value: highlight
    */
   private final Excerpt excerpt;
 
   /**
-   * Whether to include content in archived spaces in the result, this defaults to false.
-   * Default value: false
+   * Whether to include content in archived spaces in the result, this defaults to false. Default value: false
    */
   private final Boolean includeArchivedSpaces;
 
   /**
-   * The limit of the number of items to return, this may be restricted by fixed system limits.
-   * Default value: 25
+   * The limit of the number of items to return, this may be restricted by fixed system limits. Default value: 25
    */
   private final Integer limit;
 
   /**
-   * The start point of the collection to return.
-   * Default value: 0
+   * The start point of the collection to return. Default value: 0
    */
   private final Integer start;
 
@@ -105,8 +102,7 @@ public class SearchRequest
 
     if (this.cqlContext != null) {
       String param = cqlContextToQueryParam(this.cqlContext);
-      if(param != null)
-      {
+      if (param != null) {
         queryParams.put("cqlcontext", param);
       }
     }
@@ -129,16 +125,14 @@ public class SearchRequest
 
     if (this.expandedProperties != null) {
       queryParams.put("expand", this.expandedProperties.getProperties()
-          .stream().collect(Collectors.joining(",")));
+              .stream().collect(Collectors.joining(",")));
     }
 
     return queryParams;
   }
 
-  private String cqlContextToQueryParam(CqlContext cqlContext)
-  {
-    try
-    {
+  private String cqlContextToQueryParam(CqlContext cqlContext) {
+    try {
       String jsonString = new ObjectMapper().writeValueAsString(cqlContext);
       String urlEncodedJson = URLEncoder.encode(jsonString, StandardCharsets.UTF_8.toString());
       return urlEncodedJson;
@@ -165,14 +159,13 @@ public class SearchRequest
    */
   @Override
   public Class<?> getReturnType() {
-    return SearchContentResponse.class;
+    return SearchResponse.class;
   }
 
   /**
    * This class can be used to construct an instance of {@link SearchRequest}.
    */
   public static final class Builder {
-
     private String cql;
     private CqlContext cqlContext;
     private Excerpt excerpt;
@@ -259,15 +252,13 @@ public class SearchRequest
     }
 
     /**
-     * This method creates an instance of {@link SearchRequest} using the values that were set
-     * on this instance.
+     * This method creates an instance of {@link SearchRequest} using the values that were set on this instance.
      *
      * @return A new instance of {@link SearchRequest} with the values set on this instance.
      */
     public SearchRequest build() throws IllegalStateException {
       if (this.cql == null) {
-        throw new IllegalStateException(
-            "You must specify a CQL query");
+        throw new IllegalStateException("You must specify a CQL query");
       }
 
       if (this.limit != null && this.limit <= 0) {
@@ -281,5 +272,4 @@ public class SearchRequest
       return new SearchRequest(this);
     }
   }
-
 }
