@@ -16,9 +16,7 @@
     </properties>
 
     <build>
-
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -28,13 +26,10 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-
         </plugins>
-
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
@@ -97,7 +92,6 @@
             <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 </project>
