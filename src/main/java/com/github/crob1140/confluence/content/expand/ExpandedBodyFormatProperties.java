@@ -4,9 +4,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.github.crob1140.confluence.content.ContentBodyFormat;
+
 /**
  * This class represents the properties that can be expanded in a {@link
- * com.github.crob1140.confluence.content.ContentBodyFormat} instance returned from the Confluence
+ * ContentBodyFormat} instance returned from the Confluence
  * Cloud server.
  */
 public class ExpandedBodyFormatProperties {
@@ -30,8 +32,7 @@ public class ExpandedBodyFormatProperties {
    * This class can be used to construct an instance of {@link ExpandedBodyFormatProperties}.
    */
   public static class Builder {
-
-    private Set<String> properties;
+    private final Set<String> properties;
 
     public Builder() {
       this.properties = new HashSet<>();

@@ -4,10 +4,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.github.crob1140.confluence.content.Content;
+
 /**
  * This class represents the descendants that can be expanded in a {@link
- * com.github.crob1140.confluence.content.Content} instance returned from the Confluence Cloud
- * server.
+ * Content} instance returned from the Confluence Cloud server.
  */
 public class ExpandedDescendantsProperties {
 
@@ -30,8 +31,7 @@ public class ExpandedDescendantsProperties {
    * This class can be used to construct an instance of {@link ExpandedDescendantsProperties}.
    */
   public static class Builder {
-
-    private Set<String> properties;
+    private final Set<String> properties;
 
     public Builder() {
       this.properties = new HashSet<>();
