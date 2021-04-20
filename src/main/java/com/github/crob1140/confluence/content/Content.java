@@ -271,4 +271,8 @@ public class Content {
       return new Content(this);
     }
   }
+
+  public String toString() {
+    return super.toString() + "[id=" + getId() + ", title=" + getTitle() + "]";
+  }
 }
