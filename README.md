@@ -3,7 +3,11 @@
 [![Test Coverage](https://codecov.io/gh/crob1140/confluence-java-client/branch/master/graph/badge.svg)](https://codecov.io/gh/crob1140/confluence-java-client)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.crob1140/confluence-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.crob1140/confluence-java-client)
 
-A simple Java client for the Confluence Cloud REST API
+A simple Java client for the Confluence Cloud REST API.
+
+Note: This library is a fork of the seemingly dead 
+[confluence-java-client](https://github.com/crob1140/confluence-java-client) 
+project by Callum Robertson. 
 
 ## Installation
 
@@ -22,7 +26,7 @@ dependencies {
 
 Create a new client instance:
 ```java
-WebTarget wikiTarget = ClientBuilder.newClient().target("http://www.sample.atlassian.net/wiki");
+WebTarget wikiTarget = ClientBuilder.newClient().target("https://www.sample.atlassian.net/wiki");
 AuthMethod basicAuth = new BasicAuth("username", "password");
 Confluence client = new ConfluenceClient(wikiTarget, basicAuth);
 ```
@@ -61,5 +65,6 @@ Content updatedContent = client.updateContent(new UpdateContentRequest.Builder()
 ## Contribution
 This client is a work-in-progress, and API methods will be added iteratively.
 If there is a particular feature you would like added, feel free to raise it as an issue, or fork the repository and create a pull request with your own changes.
+
 ## License
 MIT
