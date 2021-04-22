@@ -9,10 +9,9 @@ import javax.ws.rs.HttpMethod;
 
 import com.github.crob1140.confluence.content.Content;
 
-public class AddAttachmentsRequest extends ConfluenceFileRequest {
+public class AddAttachmentsRequest extends ConfluenceFileUploadRequest {
     private final String id;
     private final File file;
-    private String name;
 
     public AddAttachmentsRequest(Builder builder) {
         super();
@@ -47,12 +46,6 @@ public class AddAttachmentsRequest extends ConfluenceFileRequest {
     public File getFile() {
         return file;
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
 
     /**
      * This method returns the class of the object in the body of the response for this request.

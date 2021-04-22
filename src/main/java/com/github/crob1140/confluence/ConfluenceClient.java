@@ -1,10 +1,12 @@
 package com.github.crob1140.confluence;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -20,10 +22,11 @@ import com.github.crob1140.confluence.content.search.SearchResult;
 import com.github.crob1140.confluence.errors.ConfluenceRequestException;
 import com.github.crob1140.confluence.errors.ErrorResponse;
 import com.github.crob1140.confluence.requests.AddAttachmentsRequest;
-import com.github.crob1140.confluence.requests.ConfluenceFileRequest;
+import com.github.crob1140.confluence.requests.ConfluenceFileUploadRequest;
 import com.github.crob1140.confluence.requests.ConfluenceRequest;
 import com.github.crob1140.confluence.requests.CreateContentRequest;
 import com.github.crob1140.confluence.requests.DeleteAttachmentsRequest;
+import com.github.crob1140.confluence.requests.DownloadAttachmentRequest;
 import com.github.crob1140.confluence.requests.GetAttachmentsRequest;
 import com.github.crob1140.confluence.requests.GetAttachmentsResponse;
 import com.github.crob1140.confluence.requests.GetContentRequest;
@@ -111,7 +114,7 @@ public class ConfluenceClient {
   }
 
     public Content addAttachment(AddAttachmentsRequest request) throws ConfluenceRequestException {
-        return (Content) performFileRequest(request);
+        return (Content) performFileUploadRequest(request);
     }
 
     public Content deleteAttachment(DeleteAttachmentsRequest request) throws ConfluenceRequestException {
@@ -122,7 +125,17 @@ public class ConfluenceClient {
         return ((GetAttachmentsResponse) performRequest(request)).getResults();
     }
 
-    Object performFileRequest(ConfluenceFileRequest request) throws ConfluenceRequestException {
+    public InputStream downloadAttachment(DownloadAttachmentRequest request) {
+        WebTarget endpointTarget = wikiTarget.path(request.getRelativePath());
+
+        Invocation.Builder invocationBuilder = endpointTarget.request();
+        invocationBuilder.header("Authorization", authMethod.getAuthHeaderValue());
+
+        Response response = invocationBuilder.method(HttpMethod.GET);
+        return (InputStream) response.readEntity(request.getReturnType());
+    }
+
+    Object performFileUploadRequest(ConfluenceFileUploadRequest request) throws ConfluenceRequestException {
         WebTarget endpointTarget = wikiTarget.path(request.getRelativePath());
         for (Entry<String, String> queryParam : request.getQueryParams().entrySet()) {
             endpointTarget = endpointTarget.queryParam(queryParam.getKey(), queryParam.getValue());
@@ -137,9 +150,9 @@ public class ConfluenceClient {
 
         String methodName = request.getMethod();
 
-        final FileDataBodyPart filePart = new FileDataBodyPart("file", request.getFile());
+        FileDataBodyPart filePart = new FileDataBodyPart("file", request.getFile());
         FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
-        final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart);
+        FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart);
 
         Response response = invocationBuilder.method(methodName, Entity.entity(multipart, multipart.getMediaType()));
 
@@ -250,7 +263,7 @@ public class ConfluenceClient {
     return requestHeaders;
   }
 
-    private Map<String, String> getRequestHeaders(ConfluenceFileRequest request) {
+    private Map<String, String> getRequestHeaders(ConfluenceFileUploadRequest request) {
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("Content-Type", "multipart/form-data");
         requestHeaders.put("Accept", request.getAcceptedResponseType().toString());
