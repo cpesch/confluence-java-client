@@ -1,5 +1,7 @@
 package com.github.crob1140.confluence.content;
 
+import java.time.ZonedDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,6 +19,8 @@ public class Version {
   private User by;
   @JsonProperty
   private Integer number;
+  @JsonProperty
+  private ZonedDateTime when;
 
   @SuppressWarnings("unused")
   private Version() {
@@ -48,5 +52,14 @@ public class Version {
    */
   public Integer getNumber() {
     return number;
+  }
+
+  /**
+   * This method returns the timestamp of the version creation.
+   *
+   * @return The timestamp of the version creation.
+   */
+  public ZonedDateTime getWhen() {
+    return when;
   }
 }
