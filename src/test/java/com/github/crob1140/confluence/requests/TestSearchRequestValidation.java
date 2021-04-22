@@ -13,13 +13,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class TestSearchRequestValidation {
-
-  @Rule
-  public final ExpectedException exception = ExpectedException.none();
-
-  private SearchRequest.Builder requestBuilder;
-  private Class<Exception> expectedExceptionClass;
-  private String expectedExceptionMessage;
+  private final SearchRequest.Builder requestBuilder;
+  private final Class<Exception> expectedExceptionClass;
+  private final String expectedExceptionMessage;
 
   public TestSearchRequestValidation(String description,
       SearchRequest.Builder requestBuilder, Class<Exception> expectedExceptionClass,
@@ -61,8 +57,12 @@ public class TestSearchRequestValidation {
 
   @Test
   public void testExpectedExceptionThrown() {
-    exception.expect(this.expectedExceptionClass);
-    exception.expectMessage(this.expectedExceptionMessage);
-    this.requestBuilder.build();
+    try {
+      this.requestBuilder.build();
+      Assert.fail("Should have thrown " + this.expectedExceptionClass + " but didn't");
+    } catch (Exception e) {
+      Assert.assertEquals(this.expectedExceptionClass, e.getClass());
+      Assert.assertEquals(this.expectedExceptionMessage, e.getMessage());
+    }
   }
 }

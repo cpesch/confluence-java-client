@@ -5,6 +5,8 @@ import com.github.crob1140.confluence.content.ContentStatus;
 import com.github.crob1140.confluence.content.StandardContentType;
 import java.util.Arrays;
 import java.util.Collection;
+
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,10 +16,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class TestCreateContentRequestValidation {
-
-  private CreateContentRequest.Builder requestBuilder;
-  private Class<Exception> expectedExceptionClass;
-  private String expectedExceptionMessage;
+  private final CreateContentRequest.Builder requestBuilder;
+  private final Class<Exception> expectedExceptionClass;
+  private final String expectedExceptionMessage;
 
   public TestCreateContentRequestValidation(String description,
       CreateContentRequest.Builder requestBuilder, Class<Exception> expectedExceptionClass,
@@ -26,9 +27,6 @@ public class TestCreateContentRequestValidation {
     this.expectedExceptionClass = expectedExceptionClass;
     this.expectedExceptionMessage = expectedExceptionMessage;
   }
-
-  @Rule
-  public final ExpectedException exception = ExpectedException.none();
 
   @Parameters(name = "{0}")
   public static Collection<Object[]> data() {
@@ -56,8 +54,12 @@ public class TestCreateContentRequestValidation {
 
   @Test
   public void testExpectedExceptionThrown() {
-    exception.expect(this.expectedExceptionClass);
-    exception.expectMessage(this.expectedExceptionMessage);
-    this.requestBuilder.build();
+    try {
+      this.requestBuilder.build();
+      Assert.fail("Should have thrown " + this.expectedExceptionClass + " but didn't");
+    } catch (Exception e) {
+      Assert.assertEquals(this.expectedExceptionClass, e.getClass());
+      Assert.assertEquals(this.expectedExceptionMessage, e.getMessage());
+    }
   }
 }

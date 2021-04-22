@@ -2,6 +2,8 @@ package com.github.crob1140.confluence.requests;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,13 +13,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class TestGetContentRequestValidation {
-
-  @Rule
-  public final ExpectedException exception = ExpectedException.none();
-
-  private GetContentRequest.Builder requestBuilder;
-  private Class<Exception> expectedExceptionClass;
-  private String expectedExceptionMessage;
+  private final GetContentRequest.Builder requestBuilder;
+  private final Class<Exception> expectedExceptionClass;
+  private final String expectedExceptionMessage;
 
   public TestGetContentRequestValidation(String description,
       GetContentRequest.Builder requestBuilder, Class<Exception> expectedExceptionClass,
@@ -54,8 +52,12 @@ public class TestGetContentRequestValidation {
 
   @Test
   public void testExpectedExceptionThrown() {
-    exception.expect(this.expectedExceptionClass);
-    exception.expectMessage(this.expectedExceptionMessage);
-    this.requestBuilder.build();
+    try {
+      this.requestBuilder.build();
+      Assert.fail("Should have thrown " + this.expectedExceptionClass + " but didn't");
+    } catch (Exception e) {
+      Assert.assertEquals(this.expectedExceptionClass, e.getClass());
+      Assert.assertEquals(this.expectedExceptionMessage, e.getMessage());
+    }
   }
 }
