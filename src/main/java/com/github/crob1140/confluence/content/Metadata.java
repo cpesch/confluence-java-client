@@ -12,7 +12,8 @@ import java.util.List;
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Metadata {
-
+  @JsonProperty
+  private String mediaType;
   @JsonProperty
   private LabelResult labels;
   @JsonProperty
@@ -30,6 +31,15 @@ public class Metadata {
    */
   public Metadata(List<Label> labels) {
     this.labels = new LabelResult(labels);
+  }
+
+  /**
+   * This method returns the media type of the content corresponding to this metadata.
+   *
+   * @return The media type of the content corresponding to this metadata.
+   */
+  public String getMediaType() {
+    return this.mediaType;
   }
 
   /**

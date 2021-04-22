@@ -32,6 +32,8 @@ public class Content {
   private Metadata metadata;
   @JsonProperty
   private Version version;
+  @JsonProperty
+  private Links _links;
   @SuppressWarnings("unused")
   private Content() {
     // Required for Jackson deserialization
@@ -129,6 +131,15 @@ public class Content {
    */
   public Version getVersion() {
     return version;
+  }
+
+  /**
+   * This method returns the links of this content.
+   *
+   * @return The links of this content.
+   */
+  public Links getLinks() {
+    return _links;
   }
 
   /**
