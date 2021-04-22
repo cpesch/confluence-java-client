@@ -14,7 +14,7 @@ import java.util.List;
 public class Metadata {
 
   @JsonProperty
-  private List<Label> labels;
+  private LabelResult labels;
   @JsonProperty
   private Version version;
 
@@ -29,7 +29,7 @@ public class Metadata {
    * @param labels The labels to define.
    */
   public Metadata(List<Label> labels) {
-    this.labels = labels;
+    this.labels = new LabelResult(labels);
   }
 
   /**
@@ -38,7 +38,7 @@ public class Metadata {
    * @return The labels on the content corresponding to this metadata.
    */
   public List<Label> getLabels() {
-    return this.labels;
+    return this.labels.getLabels();
   }
 
   /**
