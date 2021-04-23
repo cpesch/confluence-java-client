@@ -1,12 +1,16 @@
 package com.github.crob1140.confluence;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -125,14 +129,26 @@ public class ConfluenceClient {
         return ((GetAttachmentsResponse) performRequest(request)).getResults();
     }
 
-    public InputStream downloadAttachment(DownloadAttachmentRequest request) {
-        WebTarget endpointTarget = wikiTarget.path(request.getRelativePath());
+    private static String basicAuth(String username, String password) {
+        return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+    }
 
-        Invocation.Builder invocationBuilder = endpointTarget.request();
-        invocationBuilder.header("Authorization", authMethod.getAuthHeaderValue());
-
-        Response response = invocationBuilder.method(HttpMethod.GET);
-        return (InputStream) response.readEntity(request.getReturnType());
+    public InputStream downloadAttachment(DownloadAttachmentRequest request) throws ConfluenceRequestException {
+      try {
+          String relativePath = request.getRelativePath();
+          URL url = URI.create(wikiTarget.getUri().toString() + relativePath).toURL();
+          HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+          connection.setRequestMethod("GET");
+          connection.setDoOutput(true);
+          connection.setRequestProperty("Authorization", authMethod.getAuthHeaderValue());
+          return connection.getInputStream();
+      }
+      catch (FileNotFoundException e) {
+          throw new ConfluenceRequestException(404, "Attachment " + request.getRelativePath() + " not found: " + e.getMessage());
+      }
+      catch (Exception e) {
+          throw new ConfluenceRequestException(500, "Failed to download " + request.getRelativePath() + ": " + e.getMessage());
+      }
     }
 
     Object performFileUploadRequest(ConfluenceFileUploadRequest request) throws ConfluenceRequestException {
