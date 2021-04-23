@@ -27,6 +27,8 @@ public class Content {
   @JsonProperty
   private List<Content> ancestors;
   @JsonProperty
+  private Children children;
+  @JsonProperty
   private ContentBody body;
   @JsonProperty
   private Metadata metadata;
@@ -104,6 +106,15 @@ public class Content {
    */
   public List<Content> getAncestors() {
     return ancestors;
+  }
+
+  /**
+   * This method returns the children of this content.
+   *
+   * @return The children of this content.
+   */
+  public Children getChildren() {
+    return children;
   }
 
   /**
