@@ -9,3 +9,4 @@
 /target
 gradle.properties
 travis/gradle.properties
+travis/secrets.tar
