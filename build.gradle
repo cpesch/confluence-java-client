@@ -6,8 +6,8 @@ plugins {
     id 'signing'
 }
 
-group 'io.github.cpesch.com.github.crob1140'
-version = '1.1.0-SNAPSHOT'
+group = 'io.github.cpesch.com.github.crob1140'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
