@@ -1,6 +1,8 @@
 language: java
 jdk:
   - openjdk8
+before_install:
+  openssl aes-256-cbc -K $encrypted_0e9c7b8ee6fd_key -iv $encrypted_0e9c7b8ee6fd_iv -in travis/gradle.properties.enc -out gradle.properties -d;
 before_script:
   - chmod +x gradlew
 script:

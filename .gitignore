@@ -8,3 +8,4 @@
 /out
 /target
 gradle.properties
+travis/gradle.properties
