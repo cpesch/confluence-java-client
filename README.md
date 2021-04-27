@@ -1,13 +1,15 @@
 # Confluence Java Client
-[![Build Status](https://travis-ci.org/crob1140/confluence-java-client.svg?branch=master)](https://travis-ci.org/crob1140/confluence-java-client)
-[![Test Coverage](https://codecov.io/gh/crob1140/confluence-java-client/branch/master/graph/badge.svg)](https://codecov.io/gh/crob1140/confluence-java-client)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.crob1140/confluence-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.crob1140/confluence-java-client)
+[![Build Status](https://travis-ci.com/cpesch/confluence-java-client.svg?branch=master)](https://travis-ci.com/cpesch/confluence-java-client)
+[![Test Coverage](https://codecov.io/gh/cpesch/confluence-java-client/branch/master/graph/badge.svg)](https://codecov.io/gh/cpesch/confluence-java-client)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.cpesch.com.github.crob1140/confluence-java-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.cpesch.com.github.crob1140/confluence-java-client)
 
 A simple Java client for the Confluence Cloud REST API.
 
-Note: This library is a fork of the seemingly dead 
+Note: [This library](https://github.com/cpesch/confluence-java-client) 
+is a fork of the seemingly dead 
 [confluence-java-client](https://github.com/crob1140/confluence-java-client) 
-project by Callum Robertson. 
+project by Callum Robertson for which I've collected open pull 
+requests and commits from forks and added functionality I needed.
 
 ## Installation
 
@@ -18,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.github.crob1140', name: 'confluence-java-client', version: '1.0.0'
+    compile group: 'io.github.cpesch.com.github.crob1140', name: 'confluence-java-client', version: '1.1.0'
 }
 ```
 

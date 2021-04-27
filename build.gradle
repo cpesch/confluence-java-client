@@ -6,7 +6,8 @@ plugins {
     id 'signing'
 }
 
-group 'com.github.crob1140'
+group 'io.github.cpesch.com.github.crob1140'
+version = '1.1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -31,17 +32,14 @@ dependencies {
     testCompile group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
 }
 
-test {
-    jacoco {
-        append = false
-    }
-}
-
+tasks.test.finalizedBy jacocoTestReport
 
 jacocoTestReport {
+    dependsOn test
     reports {
-        xml.enabled true
+        csv.enabled false
         html.enabled false
+        xml.enabled true
     }
 }
 
@@ -64,11 +62,11 @@ uploadArchives {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
@@ -77,12 +75,12 @@ uploadArchives {
                 name 'Confluence Java Client'
                 packaging 'jar'
                 description 'A simple Java client for the Confluence Cloud REST API'
-                url 'https://github.com/crob1140/confluence-java-client'
+                url 'https://github.com/cpesch/confluence-java-client'
 
                 scm {
-                    connection 'scm:git@github.com/crob1140/confluence-java-client.git'
-                    developerConnection 'scm:git@github.com/crob1140/confluence-java-client.git'
-                    url 'https://github.com/crob1140/confluence-java-client.git'
+                    connection 'scm:git@github.com/cpesch/confluence-java-client.git'
+                    developerConnection 'scm:git@github.com/cpesch/confluence-java-client.git'
+                    url 'https://github.com/cpesch/confluence-java-client.git'
                 }
 
                 licenses {
@@ -97,6 +95,11 @@ uploadArchives {
                         id 'cjrobertson'
                         name 'Callum Robertson'
                         email 'mail@cjrobertson.net'
+                    }
+                    developer {
+                        id 'cpesch'
+                        name 'Christian Pesch'
+                        email 'christian_pesch@gmx.de'
                     }
                 }
             }
